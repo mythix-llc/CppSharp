@@ -35,7 +35,6 @@ namespace CppSharp.AST
         {
             get
             {
-                Debug.Assert(Kind == VTableComponentKind.FunctionPointer);
                 return Declaration as Method;
             }
         }
@@ -99,7 +98,7 @@ namespace CppSharp.AST
 
         /// Provides native argument ABI information.
         public RecordArgABI ArgABI { get; set; }
-        
+
         /// Virtual function tables in Microsoft mode.
         public List<VFTableInfo> VFTables { get; set; }
 
