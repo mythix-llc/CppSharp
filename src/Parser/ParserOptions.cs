@@ -80,10 +80,18 @@ namespace CppSharp.Parser
         public bool EnableRTTI { get; set; }
         public LanguageVersion? LanguageVersion { get; set; }
 
-        /// Additional paths to use when searching for system headers.
-        /// These paths will be added before default system paths.
-        public List<string> AdditionalSystemIncludeDirectories { get; set; } =
-            new List<string>();
+        /// Class containing all options that override default CppSharp behavior.
+        public class Overrides
+        {
+            /// Paths to use when searching for system headers.
+            /// Adding paths to this list will cause some default system include
+            ///   paths to not be added automatically.
+            public List<string> SystemIncludeDirectories { get; set; } =
+                new List<string>();
+        }
+
+        /// Overrides that may be applied to modify default CppSharp behavior.
+        public Overrides UserOverrides { get; set; } = new Overrides();
 
         public void BuildForSourceFile(
             IEnumerable<CppSharp.AST.Module> modules, string file = null)
@@ -243,9 +251,9 @@ namespace CppSharp.Parser
             string majorVersion = shortVersion.Split('.')[0];
             string[] versions = { longVersion, shortVersion, majorVersion };
             string[] triples = { "x86_64-linux-gnu", "x86_64-pc-linux-gnu" };
-            if (AdditionalSystemIncludeDirectories.Any())
+            if (UserOverrides.SystemIncludeDirectories.Any())
             {
-                foreach (var path in AdditionalSystemIncludeDirectories)
+                foreach (var path in UserOverrides.SystemIncludeDirectories)
                 {
                     AddSystemIncludeDirs(path);
                 }
@@ -267,7 +275,7 @@ namespace CppSharp.Parser
 
             foreach (var triple in triples)
             {
-                if (!AdditionalSystemIncludeDirectories.Any())
+                if (!UserOverrides.SystemIncludeDirectories.Any())
                 {
                     foreach (var version in versions)
                     {
