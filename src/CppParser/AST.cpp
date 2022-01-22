@@ -281,7 +281,7 @@ Declaration::Declaration(DeclarationKind kind)
     , definitionOrder(0)
     , originalPtr(0)
     , alignAs(0)
-    , maxFieldAlignment(0)    
+    , maxFieldAlignment(0)
 {
 }
 
@@ -431,7 +431,7 @@ Class* DeclarationContext::FindClass(const void* OriginalPtr,
             _class = CreateClass(Name, IsComplete);
             Classes.push_back(_class);
         }
-        
+
         return _class;
     }
 
@@ -485,7 +485,7 @@ Enumeration* DeclarationContext::FindEnum(const std::string& Name, bool Create)
 
 Enumeration* DeclarationContext::FindEnumWithItem(const std::string& Name)
 {
-    auto foundEnumIt = std::find_if(Enums.begin(), Enums.end(), 
+    auto foundEnumIt = std::find_if(Enums.begin(), Enums.end(),
         [&](Enumeration* _enum) { return _enum->FindItemByName(Name) != nullptr; });
     if (foundEnumIt != Enums.end())
         return *foundEnumIt;
@@ -531,7 +531,7 @@ TypedefDecl* DeclarationContext::FindTypedef(const std::string& Name, bool Creat
 
     if (!Create)
         return nullptr;
-     
+
     auto tdef = new TypedefDecl();
     tdef->name = Name;
     tdef->_namespace = this;
@@ -646,7 +646,7 @@ Parameter::~Parameter()
     deleteExpression(defaultArgument);
 }
 
-Function::Function() 
+Function::Function()
     : DeclarationContext(DeclarationKind::Function)
     , isReturnIndirect(false)
     , isConstExpr(false)
@@ -667,7 +667,7 @@ Function::Function()
 Function::~Function() {}
 DEF_VECTOR(Function, Parameter*, Parameters)
 
-Method::Method() 
+Method::Method()
     : Function()
     , isVirtual(false)
     , isStatic(false)
@@ -677,8 +677,8 @@ Method::Method()
     , isCopyConstructor(false)
     , isMoveConstructor(false)
     , refQualifier(RefQualifierKind::None)
-{ 
-    kind = DeclarationKind::Method; 
+{
+    kind = DeclarationKind::Method;
 }
 
 Method::~Method() {}
@@ -772,11 +772,11 @@ ClassTemplate::~ClassTemplate() {}
 
 DEF_VECTOR(ClassTemplate, ClassTemplateSpecialization*, Specializations)
 
-ClassTemplateSpecialization::ClassTemplateSpecialization() 
+ClassTemplateSpecialization::ClassTemplateSpecialization()
     : Class()
     , templatedDecl(0)
-{ 
-    kind = DeclarationKind::ClassTemplateSpecialization; 
+{
+    kind = DeclarationKind::ClassTemplateSpecialization;
 }
 
 ClassTemplateSpecialization::~ClassTemplateSpecialization() {}
@@ -785,8 +785,8 @@ DEF_VECTOR(ClassTemplateSpecialization, TemplateArgument, Arguments)
 
 ClassTemplatePartialSpecialization::ClassTemplatePartialSpecialization()
     : ClassTemplateSpecialization()
-{ 
-    kind = DeclarationKind::ClassTemplatePartialSpecialization; 
+{
+    kind = DeclarationKind::ClassTemplatePartialSpecialization;
 }
 
 ClassTemplatePartialSpecialization::~ClassTemplatePartialSpecialization() {}
@@ -870,9 +870,9 @@ UnresolvedUsingTypename::UnresolvedUsingTypename() : Declaration(DeclarationKind
 
 UnresolvedUsingTypename::~UnresolvedUsingTypename() {}
 
-Namespace::Namespace() 
+Namespace::Namespace()
     : DeclarationContext(DeclarationKind::Namespace)
-    , isInline(false) 
+    , isInline(false)
 {
 }
 
@@ -1076,6 +1076,8 @@ HTMLTagComment::HTMLTagComment(CommentKind Kind) : InlineContentComment(Kind) {}
 HTMLStartTagComment::Attribute::Attribute() {}
 
 HTMLStartTagComment::Attribute::Attribute(const Attribute& rhs) : name(rhs.name), value(rhs.value) {}
+
+HTMLStartTagComment::Attribute::~Attribute() {}
 
 HTMLStartTagComment::HTMLStartTagComment() : HTMLTagComment(CommentKind::HTMLStartTagComment) {}
 
