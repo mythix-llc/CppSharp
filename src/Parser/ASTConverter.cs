@@ -176,7 +176,7 @@ namespace CppSharp
         public abstract TRet VisitTypeTemplateParameter(TypeTemplateParameter decl);
         public abstract TRet VisitNonTypeTemplateParameter(NonTypeTemplateParameter decl);
         public abstract TRet VisitUnresolvedUsingTypename(UnresolvedUsingTypename decl);
-        
+
         public virtual TRet Visit(Parser.AST.Declaration decl)
         {
             switch (decl.Kind)
@@ -1261,7 +1261,23 @@ namespace CppSharp
             _function.IsDeleted = function.IsDeleted;
             _function.IsDefaulted = function.IsDefaulted;
             _function.FriendKind = VisitFriendKind(function.FriendKind);
-            _function.OperatorKind = VisitCXXOperatorKind(function.OperatorKind);
+            try
+            {
+                _function.OperatorKind = VisitCXXOperatorKind(function.OperatorKind);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // 2022-02-11: The spaceship operator currently isn't supported
+                //   by CppSharp. Skip generation of the function in this case.
+                if (function.Name == "operator<=>")
+                {
+                    return;
+                }
+                else
+                {
+                    throw;
+                }
+            }
             _function.Mangled = function.Mangled;
             _function.Signature = CleanSignature(function.Signature);
             _function.Body = function.Body;
